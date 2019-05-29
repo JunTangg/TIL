@@ -101,6 +101,22 @@ git remote add origin <remote url> # 드라이브 등록
 
 
 
+```sh
+# 반드시 확인
+$pwd
+/c/User/student/TIL #TIL에 있는걸 확인
+
+#수업 중간 중간
+$ git add.
+$ git commit -m '남길 메시지'
+# 적절한 타이밍에!
+
+#집에가기전에
+$ git push origin master
+```
+
+
+
 ## Python 기초
 
 ### 객체지향 프로그래밍 규칙
@@ -151,12 +167,5 @@ git remote add origin <remote url> # 드라이브 등록
   s.set_values('혁원', 27)
   print(s.name)
   ```
-
-### Dictionaly
-
-```
-
-```
-
 
 
