@@ -9,5 +9,15 @@
     <input name="keyword" type="text" placeholder="Enter Stock Code" autofocus>
     <input type="submit" value="Search">
 </form>
+
+{% if not is_first_search %}
+<section>
+    {% if is_success %}
+        <p>{{ c_name }} : {{ l_price }}$</p>
+    {% else %}
+        <p>해당 주식 정보를 검색 할 수 없습니다.</p>
+    {% endif %}
+</section>
+{% endif %}
 </body>
 </html>
