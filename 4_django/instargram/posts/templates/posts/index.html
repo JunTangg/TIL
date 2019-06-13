@@ -1,0 +1,9 @@
+{% extends 'posts/base.html' %}
+
+{% block body %}
+{% for post in posts %}
+    <div class="row">
+        {% include 'posts/_post.html' %} <!--post.html 파일을 가져온다-->
+    </div>
+{% endfor %}
+{% endblock %}
