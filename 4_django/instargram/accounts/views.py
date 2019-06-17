@@ -7,10 +7,13 @@ from django.contrib.auth import logout as auth_logout
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect("posts:index")
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            auth_login(request, user)
             return redirect('posts:index')
     else:
         form = UserCreationForm()
@@ -18,6 +21,8 @@ def signup(request):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect("posts:index")
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():

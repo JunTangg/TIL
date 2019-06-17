@@ -15,5 +15,11 @@ urlpatterns = [
     path('<int:post_id>/update/', views.update, name='update'),
     # Delete - 포스트 삭제하기
     path('<int:post_id>/delete/', views.delete, name='delete'),
+
+    # Comment_create
+    path('<int:post_id>/comments/create/', views.comment_create, name='comment_create'),
+
+    # like
+    path('<int:post_id>/likes/', views.likes, name='likes'),
 ]
 
