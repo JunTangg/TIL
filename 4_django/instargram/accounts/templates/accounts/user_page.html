@@ -1,0 +1,29 @@
+{% extends 'posts/base.html' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-4 d-flex justify-content-center">
+        <!--프로필 이미지 넣는 공간-->
+        <img src="https://picsum.photos/id/{{user_info.id}}/300/300" alt="..." class="rounded-circle">
+    </div>
+    <div class="col-8">
+        <!--개인정보가 보여지는 공간-->
+        {{user_info.username}}
+        {% if user_info in user.follow.all %}
+            <a href="{% url 'accounts:follow' user_info.id %}">팔로우 취소</a>
+        {% else %}
+            <a href="{% url 'accounts:follow' user_info.id %}">팔로우</a>
+        {% endif %}
+        <div class="flex-direction: column">
+            <p>게시물 {{user_info.post_set.count}}</p>
+            <p>팔로우 {{user_info.follower.count}}</p>
+            <p>팔로워 {{user_info.follow.count}}</p>
+        </div>
+    </div>
+</div>
+<div class="card-columns">
+    {% for post in user_info.post_set.all %}
+        {% include 'posts/_post.html' %}
+    {% endfor %}
+</div>
+{% endblock %}
