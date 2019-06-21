@@ -1,4 +1,5 @@
 {% load bootstrap4 %}
+{% load posts_templatetag %}
 {% if request.resolver_match.url_name == 'index' %}
 <div class="card col-12 col-md-6 my-3" >
 {% else %}
@@ -11,14 +12,14 @@
     {% endif %}
     <div class="card-body">
       <!--<h5 class="card-title">Card title</h5>-->
-        <p class="card-text">{{post.content}}</p>
+        <p class="card-text">{{post}}</p>
         <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
         <p>{{post.like_users.count}}명이 좋아합니다</p>
-        <p class="card-text"><strong><a href="{% url 'accounts:user_page' post.user.id %}">{{post.user.username}}</a></strong></p>
+        <p class="card-text"><strong><a href="{% url 'accounts:user_page' post.user.id %}">{{post.user.username}}</a></strong>{{post|hashtag_link|safe}}</p>
         {% if user in post.like_users.all  %}
-            <a href="{% url 'posts:likes' post.id %}"><i class="fas fa-heart" style="color:red"></i></a>
+            <i class="fas fa-heart" style="color:red" data-id="{{post.id}}"></i>
         {% else %}
-            <a href="{% url 'posts:likes' post.id %}"><i class="far fa-heart" style="color:red"></i></a>
+            <i class="far fa-heart" style="color:red" data-id="{{post.id}}"></i>
         {% endif %}
 
         {% if post.user == user %}
@@ -47,3 +48,5 @@
         <!--댓글 폼 끝-->
     {% endif %}
 </div>
+
+

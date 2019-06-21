@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from .forms import PostForm, CommentForm
-from .models import Post
+from .models import Post, Hashtag
 from django.contrib.auth.decorators import login_required
 from itertools import chain
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -43,6 +44,17 @@ def create(request):
             post = form.save(commit=False)
             post.user = request.user
             post.save()
+
+
+            # 해시태그 추가
+            content = form.cleaned_data.get('content')     # request.POST.get 대신 사용, 데이터를 정리해준다
+            words = content.split()
+            for word in words:
+                if word[0] == '#':
+                    # 해시테그 생성
+                    hashtag = Hashtag.objects.get_or_create(content=word)
+                    # 해시테그와 포스트 연결
+                    post.hashtags.add(hashtag[0])
             return redirect("posts:index")
         else:
             # 7. 적절하지 않은 데이터가 들어온다.
@@ -67,6 +79,18 @@ def update(request, post_id):
             form = PostForm(request.POST, instance=post)  # data = request.POST(기존데이터), instance (덮어씌울 데이터)
             if form.is_valid():
                 form.save()
+
+                # 기존의 헤쉬테그 삭제
+                post.hashtags.clear()
+                # 해시태그 추가
+                content = form.cleaned_data.get('content')  # request.POST.get 대신 사용, 데이터를 정리해준다
+                words = content.split()
+                for word in words:
+                    if word[0] == '#':
+                        # 해시테그 생성
+                        hashtag = Hashtag.objects.get_or_create(content=word)
+                        # 해시테그와 포스트 연결
+                        post.hashtags.add(hashtag[0])
                 return redirect("posts:index")
             else:
                 pass
@@ -104,7 +128,28 @@ def likes(request, post_id):
     # 이미 좋아요가 눌러졌으면 좋아요 취소
     if user in post.like_users.all():
         post.like_users.remove(user)
+        is_like = False
     # 좋아요 안했으면 좋아요 추가
     else:
         post.like_users.add(user)
-    return redirect('posts:index')
+        is_like = True
+    context = {
+        'is_like': is_like
+    }
+    return JsonResponse(context)
+    # return redirect('posts:index')
+
+
+def hashtags(request, hashtag_id):
+    hashtag = Hashtag.objects.get(id=hashtag_id)
+    posts = hashtag.post_set.all()
+    comment_form = CommentForm()
+    context = {
+        'posts': posts,
+        'comment_form': comment_form
+    }
+    return render(request, 'posts/index.html', context)
+
+
+def javascript(request):
+    return render(request, 'posts/js.html')
