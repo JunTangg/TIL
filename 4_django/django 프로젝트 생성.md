@@ -1,5 +1,9 @@
 # django 프로젝트 생성
 
+![img](https://mdn.mozillademos.org/files/13931/basic-django.png)
+
+
+
 장고 확장팩 설치
 
 ```sh
